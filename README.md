@@ -47,14 +47,20 @@
 
 ## 安装步骤 ##
 
-	git clone https://github.com/lin-xin/manage-system.git      // 把模板下载到本地
+	https://github.com/sakila1012/vue-login-manage-system.git     // 把模板下载到本地
 	cd manage-system    // 进入模板目录
 	npm install         // 安装项目依赖，等待安装完成之后
 
 ## 本地开发 ##
 
-	// 开启服务器，浏览器访问 http://localhost:8080
+	// 开启服务器，浏览器访问 http://localhost:8082
 	npm run dev
+	
+## 服务端开发 ##
+
+	// 开启服务器
+	cd service
+	node app 
 
 ## 构建生产 ##
 

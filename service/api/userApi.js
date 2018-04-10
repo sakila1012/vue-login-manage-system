@@ -17,13 +17,18 @@ var jsonWrite = function(res, ret) {
     }
 }
 
+var dateStr = function(str) {
+    return new Date(str.slice(0,7));
+}
+
 // 增加用户接口
 router.post('/addUser', (req, res) => {
     var sql = $sql.user.add;
     var params = req.body;
     console.log(params);
-    conn.query(sql, [params.name, params.account, params.password, params.repeatPass,
-                    params.email, params.phone, params.card, params.birth, params.sex], function(err, result) {
+    console.log(params.birth);
+    conn.query(sql, [params.name, params.account, params.pass, params.checkPass,
+                    params.email, params.phone, params.card, dateStr(params.birth), params.sex], function(err, result) {
         if (err) {
             console.log(err);
         }

@@ -64,7 +64,7 @@
         	onSubmit(formName) {
 				const self = this;
 				let formData = {
-					id: parseInt(localStorage.getItem('ms_userId')),
+					id: parseInt(sessionStorage.getItem('ms_userId')),
 					pass: self.form.pass,
 					checkPass: self.form.checkPass
 				};			

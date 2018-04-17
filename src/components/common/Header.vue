@@ -24,15 +24,15 @@
         },
         computed:{
             username(){
-                let username = localStorage.getItem('ms_username');
+                let username = sessionStorage.getItem('ms_username');
                 return username ? username : this.name;
             }
         },
         methods:{
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
-                    localStorage.removeItem('ms_userId')
+                    sessionStorage.removeItem('ms_username')
+                    sessionStorage.removeItem('ms_userId')
                     this.$router.push('/login');
                 } else if (command == 'userCenter') {
                     this.$router.push('/userCenter');

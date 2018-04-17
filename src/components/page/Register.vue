@@ -49,6 +49,7 @@
 </template>
 
 <script>
+	import Util from '../../utils/utils';
 	export default {
 		data() {
 			var validatePass = (rule, value, callback) => {
@@ -71,30 +72,27 @@
 				}
 			};
 			var validateEmail = (rule, value, callback) => {
-				var emailReg = /^[a-z0-9A-Z]+([-|_|\.]+[a-z0-9A-Z]+)*@([a-z0-9A-Z]+[-|\.])+[a-zA-Z]{2,5}$/;
 				if (value === '') {
 					callback(new Error('请输入邮箱'));
-				} else if (!emailReg.test(this.form.email)){
+				} else if (!Util.emailReg.test(this.form.email)){
 					callback(new Error('请输入正确的邮箱'));
 				} else {
 					callback();
 				}
 			};
 			var validatePhone = (rule, value, callback) => {
-				var phoneReg = /^1[34578]\d{9}$/;
 				if (value === '') {
 					callback(new Error('请输入手机号'));
-				} else if (!phoneReg.test(this.form.phone)){
+				} else if (!Util.phoneReg.test(this.form.phone)){
 					callback(new Error('请输入正确的手机号'));
 				} else {
 					callback();
 				}
 			};
 			var validateCard = (rule, value, callback) => {
-				var idCardReg = /^(([1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4})|([1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|(X|x))))$/;
 				if (value === '') {
 					callback(new Error('请输入身份证号'));
-				} else if (!idCardReg.test(this.form.card)){
+				} else if (!Util.idCardReg.test(this.form.card)){
 					callback(new Error('请输入正确的身份证号'));
 				} else {
 					callback();
@@ -150,7 +148,7 @@
                     if (valid) {
                         self.$http.post('/api/user/addUser',self.form).then(function(response) {
 							console.log(response);
-							self.$router.push('/login');
+							self.$router.push('/register-success');
 						}).then(function(error) {
 							console.log(error);
 						})

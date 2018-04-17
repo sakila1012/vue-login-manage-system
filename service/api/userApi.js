@@ -43,12 +43,12 @@ router.post('/login', (req, res) => {
     var sql_name = $sql.user.select_name;
     // var sql_password = $sql.user.select_password;
     var params = req.body;
-    console.log(params);
-    if (params.name) {
-        sql_name += "where username ='"+ params.name +"'";
-    }
     var keywords = JSON.parse(Object.keys(params)[0]);
-    conn.query(sql_name, params.name, function(err, result) {
+    if (keywords.name) {
+        sql_name += " where username ='"+ keywords.name +"'";
+        console.log(sql_name);
+    }    
+    conn.query(sql_name, keywords.name, function(err, result) {
         if (err) {
             console.log(err);
         }
@@ -57,8 +57,8 @@ router.post('/login', (req, res) => {
             res.send('-1')   //查询不出username，data 返回-1
         } else {
             var resultArray = result[0];
-            console.log(resultArray.password);
-           // console.log(keywords);
+            console.log(resultArray);
+            console.log(keywords);
             if(resultArray.password === keywords.password) {
                 jsonWrite(res, result);
             } else {

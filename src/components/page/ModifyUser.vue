@@ -28,7 +28,6 @@
 						<el-date-picker type="date" placeholder="选择日期" v-model="form.birth" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
 					</el-col>
 				</el-form-item>
-				</el-form-item>
 				<el-form-item prop="sex" label="性别">
 					<el-select class="select-sex" v-model="form.sex" placeholder="请选择性别">
 						<el-option label="男" value="man"></el-option>
@@ -45,33 +44,31 @@
 </template>
 
 <script>
+	import Util from '../../utils/utils';
 	export default {
 		data() {
 			var validateEmail = (rule, value, callback) => {
-				var emailReg = /^[a-z0-9A-Z]+([-|_|\.]+[a-z0-9A-Z]+)*@([a-z0-9A-Z]+[-|\.])+[a-zA-Z]{2,5}$/;
 				if (value === '') {
 					callback(new Error('请输入邮箱'));
-				} else if (!emailReg.test(this.form.email)){
+				} else if (!Util.emailReg.test(this.form.email)){
 					callback(new Error('请输入正确的邮箱'));
 				} else {
 					callback();
 				}
 			};
 			var validatePhone = (rule, value, callback) => {
-				var phoneReg = /^1[34578]\d{9}$/;
 				if (value === '') {
 					callback(new Error('请输入手机号'));
-				} else if (!phoneReg.test(this.form.phone)){
+				} else if (!Util.phoneReg.test(this.form.phone)){
 					callback(new Error('请输入正确的手机号'));
 				} else {
 					callback();
 				}
 			};
 			var validateCard = (rule, value, callback) => {
-				var idCardReg = /^(([1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4})|([1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|(X|x))))$/;
 				if (value === '') {
 					callback(new Error('请输入身份证号'));
-				} else if (!idCardReg.test(this.form.card)){
+				} else if (!Util.idCardReg.test(this.form.card)){
 					callback(new Error('请输入正确的身份证号'));
 				} else {
 					callback();
@@ -115,7 +112,7 @@
         methods:{
         	getUserData() {
 				const self = this;	
-				let username = localStorage.getItem('ms_user').name;			
+				let username = sessionStorage.getItem('ms_user').name;			
 				self.$http.get('/api/user/getUser',{name: username}).then(function(response) {
 					console.log(response);
 					let result = response.data[0];
@@ -126,7 +123,7 @@
 					self.form.card = result.card;
 					self.form.birth = new Date(result.birth);
 					self.form.sex = result.sex;
-					localStorage.setItem('ms_userId', result.id);
+					sessionStorage.setItem('ms_userId', result.id);
 				}).then(function(error) {
 					console.log(error);
 				})
@@ -134,7 +131,7 @@
 			updateUserData(formName) {
 				const self = this;
 				let formData = {
-					id: parseInt(localStorage.getItem('ms_userId')),
+					id: parseInt(sessionStorage.getItem('ms_userId')),
 					email: self.form.email,
 					phone: self.form.phone,
 					card: self.form.card,

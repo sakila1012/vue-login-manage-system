@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <p style="font-size:14px;line-height:30px;color:#999;cursor: pointer;float:right;" @click="handleCommand()">注册</p>  
+                <p class="register" @click="handleCommand()">注册</p>  
             </el-form>
         </div>
     </div>    
@@ -59,6 +59,65 @@
         },
         methods: {
             submitForm(formName) {
+                // debounceAjax(formName)
+                const self = this;
+                self.$refs[formName].validate((valid) => {
+                    if (valid) {                      
+                        self.$http.post('/api/user/login',JSON.stringify(self.ruleForm))
+                        .then((response) => {
+                            console.log(response);
+                            if (response.data == -1) {
+                                self.errorInfo = true;
+                                self.errInfo = '该用户不存在';
+                                console.log('该用户不存在')
+                            } else if (response.data == 0) {
+                                console.log('密码错误')
+                                self.errorInfo = true;
+                                self.errInfo = '密码错误';
+                            } else if (response.status == 200) {
+                                self.$router.push('/readme');
+                                sessionStorage.setItem('ms_username',self.ruleForm.name);
+                                sessionStorage.setItem('ms_user',JSON.stringify(self.ruleForm));
+                                console.log(JSON.stringify(self.ruleForm));  
+                            }                            
+                        }).then((error) => {
+                            console.log(error);
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            handleCommand() {
+                this.$router.push('/register');
+            },
+            randomNum(min, max) {
+                return Math.floor(Math.random() * (max - min) + min);
+            },
+            refreshCode() {
+                this.identifyCode = "";
+                this.makeCode(this.identifyCodes, 4);
+            },
+            makeCode(o, l) {
+                for (let i = 0; i < l; i++) {
+                    this.identifyCode += this.identifyCodes[
+                    this.randomNum(0, this.identifyCodes.length)
+                    ];
+                }
+                console.log(this.identifyCode);
+            },
+            debounce(func, delay) {
+                return function(args) {
+                    var _this = this
+                    var _args = args
+                    clearTimeout(func.id)
+                    func.id = setTimeout(function() {
+                    func.call(_this, _args)
+                    }, delay)
+                }
+            },
+            submitDebounce(formName) {
                 const self = this;
                 self.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -88,23 +147,8 @@
                     }
                 });
             },
-            handleCommand() {
-                this.$router.push('/register');
-            },
-            randomNum(min, max) {
-                return Math.floor(Math.random() * (max - min) + min);
-            },
-            refreshCode() {
-                this.identifyCode = "";
-                this.makeCode(this.identifyCodes, 4);
-            },
-            makeCode(o, l) {
-                for (let i = 0; i < l; i++) {
-                    this.identifyCode += this.identifyCodes[
-                    this.randomNum(0, this.identifyCodes.length)
-                    ];
-                }
-                console.log(this.identifyCode);
+            debounceAjax () {
+                debounce(submitDebounce,1000);
             }
         }
     }
@@ -157,5 +201,12 @@
     .validate-code {
         width: 136px;
         float: left;
+    }
+    .register {
+        font-size:14px;
+        line-height:30px;
+        color:#999;
+        cursor: pointer;
+        float:right;
     }
 </style>

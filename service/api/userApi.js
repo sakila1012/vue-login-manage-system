@@ -43,7 +43,6 @@ router.post('/login', (req, res) => {
     var sql_name = $sql.user.select_name;
     // var sql_password = $sql.user.select_password;
     var params = req.body;
-    var keywords = JSON.parse(Object.keys(params)[0]);
     if (keywords.name) {
         sql_name += " where username ='"+ keywords.name +"'";
         console.log(sql_name);
@@ -59,7 +58,7 @@ router.post('/login', (req, res) => {
             var resultArray = result[0];
             console.log(resultArray);
             console.log(keywords);
-            if(resultArray.password === keywords.password) {
+            if(resultArray.password === params.password) {
                 jsonWrite(res, result);
             } else {
                 res.send('0')   //username
